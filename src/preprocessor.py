@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 def basic_preprocess(data, args):
   # Handle nans
@@ -86,6 +87,15 @@ def select_features(base_model_pipelines, train_data ,args):
       excluded_features = list(set(X) - set(selected_features))
       return selected_features, excluded_features
     
+    # Wrapper selection
+    elif args.feature_selection_method == "wrapper":
+      TOP_N = args.use_top_n_features
+      key_ = np.mean(np.array([m['rfe'].ranking_ for m in base_model_pipelines]), axis=0)
+      cols_ = [(c, k) for c, k in zip(X.columns.to_list(), key_)]
+      selected_features = [col[0] for col in sorted(cols_, key=lambda x: x[1])[:TOP_N]]
+      excluded_features = list(set(X) - set(selected_features))
+      return selected_features, excluded_features
+
     # Filter selection
     elif args.feature_selection_method == "filter":
       price_doc_corr = train_data.corr()['price_doc'].reset_index()

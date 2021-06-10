@@ -2,16 +2,29 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.feature_selection import RFE
 from lightgbm import LGBMRegressor
 from .autoencoder import Autoencoder
 
 def get_model(args, feature_selection=False):
     if feature_selection:
-        pipeline_lgbm = Pipeline([
-            ('scaler', RobustScaler()),
-            ('regressor', LGBMRegressor(random_state=args.seed)),
-            ])
-        return pipeline_lgbm
+        if args.feature_selection_method == 'embedded':
+            pipeline_lgbm = Pipeline([
+                ('scaler', RobustScaler()),
+                ('regressor', LGBMRegressor(random_state=args.seed)),
+                ])
+            return pipeline_lgbm
+        elif args.feature_selection_method == 'wrapper':
+            pipeline_rfe = Pipeline([
+                ('scaler', RobustScaler()),
+                ('rfe', RFE(
+                    estimator=LGBMRegressor(random_state=args.seed), 
+                    n_features_to_select=args.use_top_n_features, 
+                    step=args.rfe_step_size, 
+                    verbose=2)),
+                ('regressor', LGBMRegressor(random_state=args.seed)),
+                ])
+            return pipeline_rfe
         
     if args.base_model == "lgbm":
         pipeline_lgbm = Pipeline([

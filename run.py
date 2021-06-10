@@ -34,6 +34,9 @@ if __name__ == "__main__":
     parser.add_argument("--num_cv_split", type=int, default=5)
     parser.add_argument("--use_top_n_features", type=int, default=20)
 
+    # Feature Selection Options
+    parser.add_argument("--rfe_step_size", type=int, default=10)
+
     # K-Means Options
     parser.add_argument("--kmeans_max_iter", type=int, default=300)
     parser.add_argument("--kmeans_n_clusters", type=int, default=8)
@@ -76,8 +79,8 @@ if __name__ == "__main__":
     if args.feature_selection_method == "none":
         print("No feature selection.")
 
-    elif args.feature_selection_method == "embedded":
-        print("Processing embedded feature selection.")
+    elif args.feature_selection_method == "embedded" or args.feature_selection_method == "wrapper":
+        print(f"Processing {args.feature_selection_method} feature selection.")
         fs_base_models_, _ = train_cv(X, y, get_model(args, True), args)
         selected_features, excluded_features = select_features(fs_base_models_, train_data, args)
         X_selected = X[selected_features] 
