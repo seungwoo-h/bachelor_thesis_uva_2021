@@ -1,1 +1,3 @@
-# bachelor_thesis_uva_2021
+# Bachelor's Thesis 2021
+---
+Source code for experiments.
