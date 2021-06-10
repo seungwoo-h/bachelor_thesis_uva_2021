@@ -18,3 +18,20 @@ $ sh run_experiments.sh
 ```bash
 $ python run.py --feature_selection_method [METHOD1] --feature_extraction_method [METHOD2] --base_model [MODEL]
 ```
+## Experimental Results
+| 　Dataset          |                       | Linear Regression | Random Forest | LightGBM |
+|-------------------|-----------------------|-------------------|---------------|----------|
+| Original Dataset  |                       | 0.81583           | 0.33617       | 0.33011  |
+| Feature Selection | Feature Extraction    |                   |               |          |
+| Wrapper Methods   | No Feature Extraction | N/A               | N/A           | N/A      |
+|                   | PCA                   | N/A               | N/A           | N/A      |
+|                   | K-Means               | N/A               | N/A           | N/A      |
+|                   | Autoencoder           | N/A               | N/A           | N/A      |
+| Filter Method     | No Feature Extraction | 0.40262           | 0.34416       | 0.32711  |
+|                   | PCA                   | 0.42417           | 0.3311        | 0.32843  |
+|                   | K-Means               | 0.40315           | 0.34451       | 0.32861  |
+|                   | Autoencoder           | 0.40931           | 0.33175       | 0.33089  |
+| Embedded Method   | No Feature Extraction | 0.4133            | 0.33513       | 0.32532  |
+|                   | PCA                   | 0.41622           | 0.32839       | 0.32506  |
+|                   | K-Means               | 0.40897           | 0.33503       | 0.32545  |
+|                   | Autoencoder           | 0.4151            | 0.33026       | 0.32838  |
