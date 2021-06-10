@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import DataLoader
 
-from .autoencoder import AutoencoderDataset, _encode
+from .autoencoder import AutoencoderDataset, autoencode
 
 # Inference
 
@@ -36,8 +36,8 @@ def cv_ensemble_ae(models, scalers, test_data, selected_features, excluded_featu
       test_data_unselected = scaler.transform(test_data_unselected)
       test_enc_dataset = AutoencoderDataset(test_data_unselected)
       test_enc_loader = DataLoader(test_enc_dataset, batch_size=16, shuffle=False, num_workers=4)
-      out_test_enc = _encode(test_enc_loader, encoder_model)
-      test_data_selected = np.concatenate([test_data_selected.to_numpy(), out_test_enc], axis=1)
+      out_test_enc = autoencode(test_enc_loader, encoder_model)
+      test_data_selected = np.concatenate([test_data_selected, out_test_enc], axis=1)
 
       pred = model.predict(test_data_selected)
       pred = np.abs(pred)

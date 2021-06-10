@@ -66,31 +66,18 @@ def test_preprocess(data, args):
   data = data[args.train_columns]
   return data
 
-def select_features(base_model_pipelines, train_data ,args):
-    X = train_data.drop('price_doc', axis=1)
-    
-    # Embedded selection
-    if args.feature_selection_method == "embedded":
-      TOP_N = args.use_top_n_features
-      # Get average feature importance from lgbm
-      for i, pipeline in enumerate(base_model_pipelines):
-          model = pipeline['regressor']
-          if i == 0:
-              fi = model.feature_importances_.copy()
-              continue
-          fi += model.feature_importances_.copy()
-      fi = fi / args.num_cv_split
-      feature_imp = pd.DataFrame(sorted(zip(fi, X.columns)), columns=['Value','Feature'])
-      selected_features_w_imp = feature_imp.sort_values(by="Value", ascending=False)[:TOP_N] # TOP N
-      selected_features = selected_features_w_imp['Feature'].to_list()
-      excluded_features = list(set(X) - set(selected_features))
-      return selected_features, excluded_features
-    
-    # Filter selection
-    elif args.feature_selection_method == "filter":
-      price_doc_corr = train_data.corr()['price_doc'].reset_index()
-      price_doc_corr_top20 = price_doc_corr.sort_values(by='price_doc', ascending=False, key=lambda x: abs(x))[:21]
-      price_doc_corr_top20.drop(142, inplace=True)
-      selected_features = price_doc_corr_top20['index'].to_list()
-      excluded_features = list(set(X) - set(selected_features))
-      return selected_features, excluded_features
+def select_features(base_model_pipelines, args):
+    TOP_N = args.use_top_n_features
+    # Get average feature importance from lgbm
+    for i, pipeline in enumerate(base_model_pipelines):
+        model = pipeline['regressor']
+        if i == 0:
+            fi = model.feature_importances_.copy()
+            continue
+        fi += model.feature_importances_.copy()
+    fi = fi / args.num_cv_split
+    feature_imp = pd.DataFrame(sorted(zip(fi, X.columns)), columns=['Value','Feature'])
+    selected_features_w_imp = feature_imp.sort_values(by="Value", ascending=False)[:TOP_N] # TOP N
+    selected_features = selected_features_w_imp['Feature'].to_list()
+    excluded_features = list(set(X) - set(selected_features))
+    return selected_features, excluded_features

@@ -6,7 +6,6 @@ from torch.utils.data import DataLoader
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler
 from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
 
 from .metric import rmsle
 from .autoencoder import AutoencoderDataset
@@ -74,9 +73,8 @@ def train_kmeans_cv(X_data, y_data, pipeline, selected_features, excluded_featur
 
 # K-Fold training with Autoencoder
 
-def _encode(loader, encoder_model, args):
+def _encode(loader, encoder_model):
   outputs = []
-  device = args.device
   encoder_model.eval()
   with torch.no_grad():
     for batch in loader:
@@ -105,8 +103,8 @@ def train_ae_cv(X_data, y_data, pipeline, selected_features, excluded_features, 
     val_enc_dataset = AutoencoderDataset(X_valid_unselected)
     train_enc_loader = DataLoader(train_enc_dataset, batch_size=args.ae_batch_size, shuffle=False, num_workers=args.ae_num_workers)
     val_enc_loader = DataLoader(val_enc_dataset, batch_size=args.ae_batch_size, shuffle=False, num_workers=args.ae_num_workers)
-    out_train_enc = _encode(train_enc_loader, encoder_model, args)
-    out_val_enc = _encode(val_enc_loader, encoder_model, args)
+    out_train_enc = _encode(train_enc_loader, encoder_model)
+    out_val_enc = _encode(val_enc_loader, encoder_model)
 
     X_train_selected = np.concatenate([X_train_selected, out_train_enc], axis=1)
     X_valid_selected = np.concatenate([X_valid_selected, out_val_enc], axis=1)

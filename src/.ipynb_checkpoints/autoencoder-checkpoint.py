@@ -123,7 +123,6 @@ class AutoencoderTrainer:
 
 def _encode(loader, encoder_model):
   outputs = []
-  device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
   encoder_model.eval()
   with torch.no_grad():
     for batch in loader:
@@ -132,3 +131,4 @@ def _encode(loader, encoder_model):
       outputs.append(output)
     outputs = torch.cat(outputs).cpu().numpy()
   return outputs
+
