@@ -78,8 +78,8 @@ if __name__ == "__main__":
 
     elif args.feature_selection_method == "embedded":
         print("Processing embedded feature selection.")
-        models_, scores_ = train_cv(X, y, get_model(args, True), args)
-        selected_features, excluded_features = select_features(models_, train_data, args)
+        fs_base_models_, _ = train_cv(X, y, get_model(args, True), args)
+        selected_features, excluded_features = select_features(fs_base_models_, train_data, args)
         X_selected = X[selected_features] 
         X_unselected = X[excluded_features]
 
@@ -92,24 +92,24 @@ if __name__ == "__main__":
     # Feature extraction & Train base model
     if args.feature_selection_method == "none":
         print("No feature extraction.")
-        models_, scores_ = train_cv(X, y, pipeline, args)
+        models_, _ = train_cv(X, y, pipeline, args)
 
     elif args.feature_extraction_method == "none":
         print("No feature extraction. Using only selected features.")
-        models_, scores_ = train_cv(X_selected, y, pipeline, args)
+        models_, _ = train_cv(X_selected, y, pipeline, args)
 
     if args.feature_extraction_method == "pca":
         print("Feature extraction with PCA, training...")
-        models_, scalers_, pcas_, scores_ = train_pca_cv(X, y, pipeline, selected_features, excluded_features, args)
+        models_, scalers_, pcas_, _ = train_pca_cv(X, y, pipeline, selected_features, excluded_features, args)
 
     elif args.feature_extraction_method == "kmeans":
         print("Feature extraction with K-Means, training...")
-        models_, clusterers_, scores_ = train_kmeans_cv(X, y, pipeline, selected_features, excluded_features, args)
+        models_, clusterers_, _ = train_kmeans_cv(X, y, pipeline, selected_features, excluded_features, args)
 
     elif args.feature_extraction_method == "autoencoder":
         print("Feature extraction with Autoencoder, training...")
         ae_model = get_autoencoder(args)
-        models_, scalers_, scores_ = train_ae_cv(X, y, pipeline, selected_features, excluded_features, ae_model, args)
+        models_, scalers_, _ = train_ae_cv(X, y, pipeline, selected_features, excluded_features, ae_model, args)
 
     # Inference
 
