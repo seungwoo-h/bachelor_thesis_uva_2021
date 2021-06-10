@@ -14,6 +14,7 @@ $ git clone https://github.com/seungwoo-h/bachelor_thesis_uva_2021.git
 run.py will train a new model from a given training dataset and generate kaggle submission file.
 
 ### To run all experiments
+- 13 Dataset
 ```bash
 $ sh run_experiments.sh
 ```
