@@ -2,9 +2,12 @@
 ---
 Source code for experiments.
 
+https://www.kaggle.com/c/sberbank-russian-housing-market/overview
+
 ```bash
 $ git clone https://github.com/seungwoo-h/bachelor_thesis_uva_2021.git
 ```
+Usage: run.py will train a new model from a given training dataset and generate kaggle submission file.
 
 ### To run all experiments
 ```bash
