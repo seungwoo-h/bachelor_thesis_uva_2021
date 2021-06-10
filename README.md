@@ -25,6 +25,7 @@ $ python run.py --feature_selection_method [METHOD1] --feature_extraction_method
 ---
 
 ## Experimental Results
+*From Kaggle Private Leaderboard*
 | 　Dataset          |                       | Linear Regression | Random Forest | LightGBM |
 |-------------------|-----------------------|-------------------|---------------|----------|
 | Original Dataset  |                       | 0.81583           | 0.33617       | 0.33011  |
