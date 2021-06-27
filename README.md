@@ -28,14 +28,14 @@ $ python run.py --feature_selection_method [METHOD1] --feature_extraction_method
 
 ## Experimental Results
 *From Kaggle Private Leaderboard*
-| 　Dataset          |                       | Linear Regression | Random Forest | LightGBM |
+| Dataset           |                       | Linear Regression | Random Forest | LightGBM |
 |-------------------|-----------------------|-------------------|---------------|----------|
 | Original Dataset  |                       | 0.81583           | 0.33617       | 0.33011  |
 | Feature Selection | Feature Extraction    |                   |               |          |
-| Wrapper Methods   | No Feature Extraction | N/A               | N/A           | N/A      |
-|                   | PCA                   | N/A               | N/A           | N/A      |
-|                   | K-Means               | N/A               | N/A           | N/A      |
-|                   | Autoencoder           | N/A               | N/A           | N/A      |
+| Wrapper Methods   | No Feature Extraction | 0.4158            | 0.33605       | 0.32494  |
+|                   | PCA                   | 0.41444           | 0.32817       | 0.32608  |
+|                   | K-Means               | 0.42679           | 0.33613       | 0.32515  |
+|                   | Autoencoder           | 0.41362           | 0.33017       | 0.32522  |
 | Filter Method     | No Feature Extraction | 0.40262           | 0.34416       | 0.32711  |
 |                   | PCA                   | 0.42417           | 0.3311        | 0.32843  |
 |                   | K-Means               | 0.40315           | 0.34451       | 0.32861  |
