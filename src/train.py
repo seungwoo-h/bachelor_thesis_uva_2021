@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 import pandas as pd
+import statsmodels.api as sm
 import torch
 from torch.utils.data import DataLoader
 from sklearn.model_selection import KFold
@@ -12,6 +13,12 @@ from .metric import rmsle
 from .autoencoder import AutoencoderDataset
 
 # K-Fold training
+
+def get_lr_result(X_data, y_data):
+    X_ = sm.add_constant(X_data)
+    model_ols = sm.OLS(y_data, X_)
+    result = model_ols.fit()
+    return result.summary()
 
 def train_cv(X_data, y_data, pipeline, args):
   X, y = X_data.to_numpy(), y_data.to_numpy()
@@ -27,6 +34,10 @@ def train_cv(X_data, y_data, pipeline, args):
     y_pred = model.predict(X_valid)
     y_pred = np.abs(y_pred)
     score = rmsle(y_pred, y_valid)
+    # Linear regression
+    if args.base_model == "linear_reg":
+        print(get_lr_result(X_train, y_train))
+    
     # Save
     trained_models.append(model)
     scores.append(score)
@@ -67,6 +78,10 @@ def train_kmeans_cv(X_data, y_data, pipeline, selected_features, excluded_featur
     trained_models.append(model)
     clusterers.append(kmeans)
     scores.append(score)
+    
+    # Linear regression
+    if args.base_model == "linear_reg":
+        print(get_lr_result(X_train_selected, y_train))
     # Log
     print(f"[{iter+1}/{args.num_cv_split}] Train Size: {len(train_index)} | Val Size: {len(valid_index)} | RMSLE: {round(score, 3)}")
   print(f"Average RMSLE: {round(np.mean(scores), 2)} | CV RMSLE Std. Dev: {round(np.std(scores), 2)} \n")
@@ -122,6 +137,9 @@ def train_ae_cv(X_data, y_data, pipeline, selected_features, excluded_features, 
     trained_models.append(model)
     scalers.append(autoencoder_scaler)
     scores.append(score)
+    # Linear regression
+    if args.base_model == "linear_reg":
+        print(get_lr_result(X_train_selected, y_train))
     # Log
     print(f"[{iter+1}/{args.num_cv_split}] Train Size: {len(train_index)} | Val Size: {len(valid_index)} | RMSLE: {round(score, 3)}")
   print(f"Average RMSLE: {round(np.mean(scores), 2)} | CV RMSLE Std. Dev: {round(np.std(scores), 2)} \n")
@@ -163,6 +181,9 @@ def train_pca_cv(X_data, y_data, pipeline, selected_features, excluded_features,
     scalers.append(pca_scaler)
     pca_models.append(pca)
     scores.append(score)
+    # Linear regression
+    if args.base_model == "linear_reg":
+        print(get_lr_result(X_train_selected, y_train))
     # Log
     print(f"[{iter+1}/{args.num_cv_split}] Train Size: {len(train_index)} | Val Size: {len(valid_index)} | RMSLE: {round(score, 3)}")
   print(f"Average RMSLE: {round(np.mean(scores), 2)} | CV RMSLE Std. Dev: {round(np.std(scores), 2)} \n")
