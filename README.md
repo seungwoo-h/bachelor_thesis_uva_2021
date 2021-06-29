@@ -1,4 +1,7 @@
 # Bachelor's Thesis 2021
+## Abstract
+With regards to the importance of real estate valuation, this study aims to observe the change in prediction performance in Automated Valuation Models (AVMs) in accordance with the application of machine learning algorithms. This study mainly focuses on analyzing the impact of applying feature extraction techniques to AVMs. The feature extraction methods we had focused on the experiments were based on Principle Component Analysis (PCA), K-Means, Autoencoder methodologies. For the experiment, we used the Russian real estate dataset provided by Sberbank. This dataset was suitable for our experiments with feature extraction as it originally contained more than 300 features. First, we conducted a comparative analysis of prediction performance by repeating the training and testing process 37 times. Next, we confirmed the effect of feature extraction using PCA, K-Means, and Autoencoder on the linear regression model through regression analysis by testing the significance of the added coefficients. As a result, it was confirmed that the most appropriate feature extraction was different depending on the model and feature selection method used, and it was confirmed that the alternative hypothesis was supported in PCA and K-Means feature extraction.
+
 ---
 Source code for experiments.
 
